@@ -1,0 +1,18 @@
+.friends_container {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100px;
+}
+.friends_title {
+  width: 100%;
+  color: white;
+  text-align: center;
+}
+.friends__items  {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  color: white;
+  width: 100%;
+  justify-content: space-around;
+}
