@@ -12,25 +12,28 @@ import Users from './Users.js';
 import ui from './Users.module.css';
 import * as axios from 'axios';
 import images from '../../img/12.jpg';
-
+import {usersAPI} from "../../api/api.js";
 import PreLoader from '../Command/preLoader.js';
+import {toggleFollowingInProgress} from '../../Redux/Users_Redusers.js';
+import {getUsersThunkCreator} from '../../Redux/Users_Redusers.js';
 
 class UsersAPIComponent extends React.Component {
 
     componentDidMount() {
-      this.props.setIsFeatchingActionCreater(true);
-      axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`).then(response => {
-            this.props.setIsFeatchingActionCreater(false);
-        this.props.setUser(response.data.items);
-          this.props.setTotalUsersCount(response.data.totalCount);
-      });
+      this.props.getUsersThunkCreator();
+  /*    this.props.setIsFeatching(true);
+      usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
+            this.props.setIsFeatching(false);
+        this.props.setUsers(data.items);
+          this.props.setCurrent(data.totalCount);
+      });*/
     }
     onPageChanged = (pageNumber) => {
        this.props.setCurrentPage(pageNumber);
-             this.props.setIsFeatchingActionCreater(true);
-       axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`).then(response => {
-               this.props.setIsFeatchingActionCreater(false);
-         this.props.setUser(response.data.items);
+             this.props.setIsFeatching(true);
+             usersAPI.getUsers(pageNumber, this.props.pageSize).then(data => {
+               this.props.setIsFeatching(false);
+         this.props.setUsers(data.items);
        });
     }
   render() {
@@ -43,6 +46,8 @@ class UsersAPIComponent extends React.Component {
                 follow = {this.props.follow}
                 onPageChanged={this.onPageChanged }
                 currentPage = {this.props.currentPage}
+                toggleFollowingInProgress = {this.props.toggleFollowingInProgress}
+                followingInProgress = {this.props.followingInProgress}
                />
             </>
   }
@@ -54,7 +59,8 @@ let mapStateToProps = (state) => {
       pageSize : state.usersPage.pageSize,
       totalUsersCount: state.usersPage.totalUsersCount,
       currentPage : state.usersPage.currentPage,
-      isFeatching: state.usersPage.isFeatching
+      isFeatching: state.usersPage.isFeatching,
+        followingInProgress:state.usersPage.followingInProgress
     }
 }
 // тут будем передавать все функции
@@ -82,9 +88,9 @@ let mapStateToProps = (state) => {
 }
 */
 
-export default connect(mapStateToProps, {  follow:follow,
-  unfollow:unfollow,
-  setUser:setUsers,
-  setCurrentPage:setCurrentPage,
-  setTotalUsersCount: setCurrent,
-  setIsFeatchingActionCreater:setIsFeatching }) (UsersAPIComponent);
+export default connect(mapStateToProps, {  follow,
+  unfollow,
+  setUsers,  setCurrentPage,
+   setCurrent,
+  setIsFeatching,
+toggleFollowingInProgress, getUsersThunkCreator }) (UsersAPIComponent);

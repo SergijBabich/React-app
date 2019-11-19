@@ -1,10 +1,11 @@
-
+import {usersAPI} from "../api/api.js";
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USER = 'SET_USER';
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const SET_TOTAL_CURRENT = 'SET_TOTAL_CURRENT';
 const TOGGLE_IS_FEATCHING = 'TOGGLE_IS_FEATCHING';
+const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS';
 // изначально наш стейт ничего не имеет, то этому он ундефайнет, из за этого
 //надо сделать перемуннуцю которая будет ято то тда изначально ложить
 // переменная которая хранит изнвачальные данныен для 1
@@ -15,7 +16,8 @@ const TOGGLE_IS_FEATCHING = 'TOGGLE_IS_FEATCHING';
     pageSize: 5,
     totalUsersCount: 0,
     currentPage:1,
-    isFeatching: false
+    isFeatching: false,
+    followingInProgress: [2,3]
   };
  const usersReducer = (state = initialState, action) => {
    switch (action.type) {
@@ -54,6 +56,14 @@ const TOGGLE_IS_FEATCHING = 'TOGGLE_IS_FEATCHING';
    }
    case TOGGLE_IS_FEATCHING: {
      return {...state , isFeatching: action.isFeatching}
+   }
+   case TOGGLE_IS_FOLLOWING_PROGRESS: {
+      return {
+        ...state,
+        followingInProgress: action.isFeatching
+        ?   [...state.followingInProgress, action.userId]
+        : state.followingInProgress.filter(id => id != action.userId)
+      }
    }
      default:
        return state;
@@ -97,5 +107,22 @@ const TOGGLE_IS_FEATCHING = 'TOGGLE_IS_FEATCHING';
       isFeatching
       }
   }
+  export let toggleFollowingInProgress = (isFeatching, userId) => {
+    return {
+      type: TOGGLE_IS_FOLLOWING_PROGRESS,
+      isFeatching,
+      userId
+    }
+  }
 
+export const getUsersThunkCreator = (currentPage, pageSize ) => {
+  return (dispatch) => {
+  dispatch(setIsFeatching(true));
+  usersAPI.getUsers(currentPage,pageSize).then(data => {
+        dispatch(setIsFeatching(false));
+      dispatch(setUsers(data.items));
+        dispatch(setCurrent(data.totalCount));
+  });
+}
+}
  export default usersReducer;

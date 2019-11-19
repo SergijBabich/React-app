@@ -3,6 +3,7 @@ import ui from './Users.module.css';
 import * as axios from 'axios';
 import images from '../../img/12.jpg';
 import {NavLink} from 'react-router-dom';
+import {usersAPI} from "../../api/api.js";
   // єтим оборачивание селали компонетнту чистой фунцией
   // я умею чісто писать
   let Users = (props) =>  {
@@ -30,8 +31,26 @@ import {NavLink} from 'react-router-dom';
                   </NavLink>
                 </div>
             </span>
-            {u.follower? <button onClick ={ () => { props.unfollow(u.id)}}> UnFollow </button>:
-             <button onClick ={() => { props.follow(u.id)}}> Follow </button> }
+            {u.follower? <button   disabled={props.followingInProgress.some( id => id === u.id)} onClick ={ () => {
+               props.toggleFollowingInProgress(true, u.id);
+            usersAPI.getUnFollow().then(data => {
+                       if( data.resultCode ===0) {
+                           props.unfollow(data.id);
+                       }
+                       props.toggleFollowingInProgress(false, u.id);
+                     })
+                  }
+                } > UnFollow </button>:
+             <button disabled={props.followingInProgress} onClick ={() => {
+               props.toggleFollowingInProgress(true ,u.id);
+              usersAPI.getFollow().then(data => {
+                        if( data.resultCode ===0) {
+                                props.follow(data.id);
+                        }
+                        props.toggleFollowingInProgress(false, u.id);
+                      });
+
+              }}> Follow </button> }
 
             <span>
               <span>
