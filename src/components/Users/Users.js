@@ -31,26 +31,11 @@ import {usersAPI} from "../../api/api.js";
                   </NavLink>
                 </div>
             </span>
-            {u.follower? <button   disabled={props.followingInProgress.some( id => id === u.id)} onClick ={ () => {
-               props.toggleFollowingInProgress(true, u.id);
-            usersAPI.getUnFollow().then(data => {
-                       if( data.resultCode ===0) {
-                           props.unfollow(data.id);
-                       }
-                       props.toggleFollowingInProgress(false, u.id);
-                     })
-                  }
-                } > UnFollow </button>:
-             <button disabled={props.followingInProgress} onClick ={() => {
-               props.toggleFollowingInProgress(true ,u.id);
-              usersAPI.getFollow().then(data => {
-                        if( data.resultCode ===0) {
-                                props.follow(data.id);
-                        }
-                        props.toggleFollowingInProgress(false, u.id);
-                      });
-
-              }}> Follow </button> }
+            {u.follower? <button disabled={props.followingInProgress.some( id => id === u.id)} onClick ={ () => {
+                props.unfollow(u.id);}
+                } > UnFollow </button>
+                :<button disabled={props.followingInProgress} onClick ={() => { props.follow(u.id);}
+          }> Follow </button> }
 
             <span>
               <span>

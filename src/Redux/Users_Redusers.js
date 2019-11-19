@@ -70,13 +70,13 @@ const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS';
    }
  }
  // екшены
- export let follow = (userId) => {
+ export let acceptFollow = (userId) => {
    return {
      type: FOLLOW,
      userId
    }
  }
- export let unfollow = (userId) => {
+ export let acceptUnfollow = (userId) => {
    return {
      type: UNFOLLOW,
      userId
@@ -115,7 +115,7 @@ const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS';
     }
   }
 
-export const getUsersThunkCreator = (currentPage, pageSize ) => {
+export const getUsers = (currentPage, pageSize ) => {
   return (dispatch) => {
   dispatch(setIsFeatching(true));
   usersAPI.getUsers(currentPage,pageSize).then(data => {
@@ -123,6 +123,30 @@ export const getUsersThunkCreator = (currentPage, pageSize ) => {
       dispatch(setUsers(data.items));
         dispatch(setCurrent(data.totalCount));
   });
+}
+}
+
+export const follow = (userId) => {
+  return (dispatch) => {
+    dispatch(toggleFollowingInProgress(true ,userId));
+   usersAPI.getFollow(userId).then(response => {
+             if( response.data.resultCode ===0) {
+                    dispatch(acceptFollow(userId));
+             }
+             dispatch(toggleFollowingInProgress(false, userId));
+           });
+}
+}
+
+export const unfollow = (userId) => {
+  return (dispatch) => {
+    dispatch(toggleFollowingInProgress(true ,userId));
+   usersAPI.getUnFollow(userId).then(response => {
+             if( response.data.resultCode ===0) {
+                    dispatch(acceptFollow(userId));
+             }
+             dispatch(toggleFollowingInProgress(false, userId));
+           });
 }
 }
  export default usersReducer;

@@ -2,6 +2,8 @@ import React from 'react';
 import {BrowserRouter, Route} from  'react-router-dom';
 import {NavLink} from  'react-router-dom';
 import {connect} from 'react-redux';
+import {acceptFollow} from '../../Redux/Users_Redusers.js';
+import {acceptUnfollow} from '../../Redux/Users_Redusers.js';
 import {follow} from '../../Redux/Users_Redusers.js';
 import {unfollow} from '../../Redux/Users_Redusers.js';
 import {setUsers} from '../../Redux/Users_Redusers.js';
@@ -15,12 +17,12 @@ import images from '../../img/12.jpg';
 import {usersAPI} from "../../api/api.js";
 import PreLoader from '../Command/preLoader.js';
 import {toggleFollowingInProgress} from '../../Redux/Users_Redusers.js';
-import {getUsersThunkCreator} from '../../Redux/Users_Redusers.js';
+import {getUsers} from '../../Redux/Users_Redusers.js';
 
 class UsersAPIComponent extends React.Component {
 
     componentDidMount() {
-      this.props.getUsersThunkCreator();
+      this.props.getUsers(this.props.currentPage, this.props.pageSize);
   /*    this.props.setIsFeatching(true);
       usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
             this.props.setIsFeatching(false);
@@ -29,12 +31,7 @@ class UsersAPIComponent extends React.Component {
       });*/
     }
     onPageChanged = (pageNumber) => {
-       this.props.setCurrentPage(pageNumber);
-             this.props.setIsFeatching(true);
-             usersAPI.getUsers(pageNumber, this.props.pageSize).then(data => {
-               this.props.setIsFeatching(false);
-         this.props.setUsers(data.items);
-       });
+          this.props.getUsers(pageNumber, this.props.pageSize);
     }
   render() {
         return <>
@@ -90,7 +87,5 @@ let mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {  follow,
   unfollow,
-  setUsers,  setCurrentPage,
-   setCurrent,
-  setIsFeatching,
-toggleFollowingInProgress, getUsersThunkCreator }) (UsersAPIComponent);
+    setCurrentPage,
+ getUsers }) (UsersAPIComponent);
