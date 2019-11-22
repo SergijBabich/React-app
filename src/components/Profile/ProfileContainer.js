@@ -1,25 +1,26 @@
 import React from 'react';
 import p from './Profile.module.css';
-
+import {profileThank} from '../../Redux/profile_Reducer.js';
 import MyPostContainer from './MyPosts/MyPost_Container.js';
 import Profileinfo from './Profileinfo/Profileinfo.js';
 import Profile from './Profile.js';
 import * as axios from 'axios';
+import { Redirect } from 'react-router-dom';
 import {connect} from "react-redux";
 import {withRouter} from 'react-router-dom';
 import {usersAPI} from "../../api/api.js";
-import {setUserProfile} from '../../Redux/profile_Reducer.js'
+import {withAuthRedirect} from '../../HOC/withAuthRedirect.js';
+import{compose} from 'redux';
 class ProfileContaier  extends React.Component {
-  
+
       componentDidMount() {
+    
     let userId  =this.props.match.params.userId;
-    if (!userId) {
+    if (userId == false) {
       userId =2;
     }
-  usersAPI.getProfile(userId).then(data => {
-                this.props.setUserProfile(data);
+    this.props.profileThank(userId);
 
-    });
   }
   render() {
 
@@ -28,7 +29,14 @@ class ProfileContaier  extends React.Component {
    )
  }
 }
+let AuthRedirectComponent = withAuthRedirect(ProfileContaier);
 
-let mapStateToProps = (state)=> ({profile: state.profilePage.profile});
-let WithUrlDataContaierComponent = withRouter(ProfileContaier);
-export default connect(mapStateToProps, {setUserProfile})(WithUrlDataContaierComponent);
+let mapStateToProps = (state)=> ({
+  profile: state.profilePage.profile,
+});
+
+export default compose(
+  connect(mapStateToProps, { profileThank}),
+  withRouter,
+//  withAuthRedirect
+)(ProfileContaier);

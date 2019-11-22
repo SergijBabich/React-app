@@ -8,6 +8,7 @@ import DialogsContainer from  './components/Dialogs/Dialogs_Container.js';
 import News from  './components/News/News.js';
 import Music from  './components/Music/Music.js';
 import Friends from  './components/Friends/Friends.js';
+import Login from  './components/Login/Login.js';
 import UsersContainer from  './components/Users/UsersContainer.js';
 import Settings from  './components/Settings/Settings.js';
 import {BrowserRouter, Route} from  'react-router-dom';
@@ -29,13 +30,14 @@ const App = (props) => {
       <div className='app-wrapper-content'>
       {/*Route средит за состояние нашего урла и как только он сменился он его заменяет*/}
    {/*передаем параметры через пропс  для профиля*/}
-       <Route path='/profile/:userId' render = { () => <ProfileContainer   />} />
+       <Route path='/profile/:userId?' render = { () => <ProfileContainer   />} />
           {/* передаем параметры через пропс  для диалогов */}
        <Route path='/dialogs'
               render = { () => <DialogsContainer />}/>
        <Route path='/news'  component = { News } />
        <Route path='/music' component = {Music} />
        <Route path='/users'  render = { () => <UsersContainer />} />
+       <Route path='/login'  render = { () => <Login />} />
        <Route path='/settings' component = {Settings} />
       </div>
 

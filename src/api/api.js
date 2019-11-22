@@ -1,4 +1,4 @@
-import React from 'react';
+ import React from 'react';
 import {connect} from 'react-redux';
 import * as axios from 'axios';
 
@@ -17,15 +17,21 @@ export const usersAPI = {
       })
     },
     getProfile(userId ){
-      return instance.get(`profile/`+ userId).then(response => {
-        return response.data;
-      })
+      return instance.get(`profile/`+ userId)
+    
     },
     getUnFollow(userId) {
-     return instance.delete(`https://social-network.samuraijs.com/api/1.0/follow/${userId}`)
+     return instance.delete(`follow/${userId}`)
     },
     getFollow(userId) {
-      return instance.post(`https://social-network.samuraijs.com/api/1.0/follow/${userId}`)
+      return instance.post(`follow/${userId}`)
 
     }
+  }
+
+  export const authAPI = {
+     me() {
+       return instance.get(`auth/me`)
+
+     }
   }

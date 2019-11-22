@@ -15,15 +15,16 @@ import ui from './Users.module.css';
 import * as axios from 'axios';
 import images from '../../img/12.jpg';
 import {usersAPI} from "../../api/api.js";
+import {withAuthRedirect} from '../../HOC/withAuthRedirect.js';
 import PreLoader from '../Command/preLoader.js';
 import {toggleFollowingInProgress} from '../../Redux/Users_Redusers.js';
 import {getUsers} from '../../Redux/Users_Redusers.js';
-
+import{compose} from 'redux';
 class UsersAPIComponent extends React.Component {
 
     componentDidMount() {
       this.props.getUsers(this.props.currentPage, this.props.pageSize);
-  /*    this.props.setIsFeatching(true);
+  /*    this.props.setIsFeatching(true);,
       usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
             this.props.setIsFeatching(false);
         this.props.setUsers(data.items);
@@ -85,7 +86,6 @@ let mapStateToProps = (state) => {
 }
 */
 
-export default connect(mapStateToProps, {  follow,
-  unfollow,
-    setCurrentPage,
- getUsers }) (UsersAPIComponent);
+ export default compose(
+  connect(mapStateToProps, {  follow,unfollow, setCurrentPage,getUsers }),
+  withAuthRedirect) (UsersAPIComponent);

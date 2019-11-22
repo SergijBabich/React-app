@@ -4,11 +4,12 @@ import {BrowserRouter, Route} from  'react-router-dom';
 import {NavLink} from  'react-router-dom';
 import MessagesItem from './Messages/MessagesItem.js';
 import DialogItem from './DialogItem/DialogItem.js';
+import { Redirect } from 'react-router-dom';
 import {updateNewMessagesBodyCreator} from  '../../Redux/messagesPage_Reducer.js';
 import {sendMessagesCreater} from   '../../Redux/messagesPage_Reducer.js';
 
 const Dialogs =(props) => {
-
+  let chekAuth = props.isAuth;
   let state = props.messagesPage;
   // dont tach
   let dialogsElement =
@@ -29,12 +30,16 @@ const Dialogs =(props) => {
     let onNewMessageChange = (e) => {
       let body = e.target.value;
       props.updateNewMessagesBody(body);
-
-
     }
+  let redirect = () => {
+     if(!chekAuth) {
+       return <Redirect to='/login' />
+     }
+  }
 
   return(
     <div className= {d.dialogs}>
+    {redirect()}
     <div className={d.dialogs_items}>
       {dialogsElement}
    </div>
