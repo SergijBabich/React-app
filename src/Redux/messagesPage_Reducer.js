@@ -1,5 +1,4 @@
 
-const UPDATE_NEW_MESSAGES_BODY = 'UPDATE-NEW-MESSAGES-BODY';
 const SEND_MESSAGE = 'SEND-MESSAGE';
 //
   let initialState = {
@@ -13,23 +12,19 @@ const SEND_MESSAGE = 'SEND-MESSAGE';
                    {id: 1, message: "hi hoy are you"},
                     {id: 2, message: "Nice too meet you"},
                   ],
-    newMessagesBody: ''
+
   };
 //  редьюсер для диалогов проверяет по типу что нажато и посылает
 // выполнять ту фенкцию
 const messagesReducer = (state = initialState, action) => {
 
   switch (action.type) {
-    case UPDATE_NEW_MESSAGES_BODY:
-      return {
-        ...state,
-        newMessagesBody: action.body
-      };
+  
     case SEND_MESSAGE:
-      let body = state.newMessagesBody;
+      let body = action.newMessagesBody;
       return {
         ...state,
-        newMessagesBody: '',
+
           messagesData: [...state.messagesData, {
             id: 4,
             message: body
@@ -40,15 +35,11 @@ const messagesReducer = (state = initialState, action) => {
 
   }
 }
-export let sendMessagesCreater = () => {
+export let sendMessagesCreater = (newMessagesBody) => {
   return {
-    type: SEND_MESSAGE
+    type: SEND_MESSAGE,
+    newMessagesBody
   }
 }
-export let updateNewMessagesBodyCreator = (body) => {
-  return {
-    type: UPDATE_NEW_MESSAGES_BODY,
-    body: body
-  }
-}
+
 export default messagesReducer;

@@ -5,7 +5,6 @@ import {NavLink} from  'react-router-dom';
 import{compose} from 'redux';
 import MessagesItem from './Messages/MessagesItem.js';
 import DialogItem from './DialogItem/DialogItem.js';
-import {updateNewMessagesBodyCreator} from  '../../Redux/messagesPage_Reducer.js';
 import {sendMessagesCreater} from   '../../Redux/messagesPage_Reducer.js';
 import Dialogs from './Dialogs.js'
 import {connect} from   'react-redux';
@@ -20,11 +19,8 @@ import {withAuthRedirect} from '../../HOC/withAuthRedirect.js';
   }
   let mapDispatchToProps = (dispatch) => {
     return {
-      updateNewMessagesBody: (body) => {
-            dispatch( updateNewMessagesBodyCreator(body) );
-      },
-      sendMessagesCreater: () => {
-         dispatch(  sendMessagesCreater() );
+          sendMessagesCreater: (newMessagesBody) => {
+         dispatch( sendMessagesCreater(newMessagesBody) );
       },
     }
     }

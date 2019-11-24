@@ -1,7 +1,9 @@
 import {usersAPI} from "../api/api.js";
+import {profileAPI} from "../api/api.js";
+
 const ADD_POST = 'ADD-POST';
-const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const SET_USER_PROFILE = 'SET-USER-PROFILE';
+const SET_USER_STATUS = "SET-USER-STATUS";
 // изначально наш стейт ничего не имеет, то этому он ундефайнет, из за этого
 //надо сделать перемуннуцю которая будет ято то тда изначально ложить
 // переменная которая хранит изнвачальные данныен для 1
@@ -16,7 +18,8 @@ const SET_USER_PROFILE = 'SET-USER-PROFILE';
                    {id: 3, message: "fuccckkkkkk", like: 23}
                  ],
     newPostText: "ddd",
-    profile: null
+    profile: null,
+    status : ""
   };
 
  const profileReducer = (state = initialState, action) => {
@@ -24,42 +27,45 @@ const SET_USER_PROFILE = 'SET-USER-PROFILE';
      case ADD_POST: {
        let newPost = {
          id: 1,
-         message: state.newPostText,
+         message: action.addPostProfile,
          like: 12
        };
        return {
          ...state,
          myPostData: [...state.myPostData, newPost],
-         newPostText: ''
+
        };
      }
-     case UPDATE_NEW_POST_TEXT:
-       return {
-         ...state,
-         newPostText: action.newText
-       };
+
        case SET_USER_PROFILE:
        return { ...state, profile: action.profile};
 
+       case SET_USER_STATUS:
+         return {
+           ...state,
+           status: action.status
+         }
      default:
        return state;
    }
  }
- export let addPostActionCreater = () => {
+ export let addPostActionCreater = (addPostProfile) => {
    return {
-     type: ADD_POST
+     type: ADD_POST,
+     addPostProfile
    }
  }
- export let updateNewPostTextActionCreator = (text) => {
-   return {
-     type: UPDATE_NEW_POST_TEXT,
-     newText: text
-   }
- }
+
  export let setUserProfile = (profile) => {
    return {
      type: SET_USER_PROFILE,
      profile
+   }
+ }
+ export let setStatus = (status) => {
+   return {
+     type: SET_USER_STATUS,
+     status
    }
  }
  export const  profileThank = (userId ) =>
@@ -68,6 +74,21 @@ const SET_USER_PROFILE = 'SET-USER-PROFILE';
                    dispatch(setUserProfile(response.data));
       });
     }
+    export const  getStatus = (userId) =>
+       (dispatch) => {
+        profileAPI.getStatus(userId).then(response => {
+                      dispatch(setStatus(response.data));
+         });
+       }
+
+     export const  updateStatus = (status) =>
+          (dispatch) => {
+           profileAPI.updateStatus(status).then(response => {
+              if(response.data.resultCode ===0) {
+                         dispatch(setStatus(status));
+                       }
+            });
+          }
 
 
  export default profileReducer;

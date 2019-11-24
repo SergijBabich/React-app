@@ -1,6 +1,7 @@
 import React from 'react';
 import s from './MyPost.module.css';
-import Post from './Post/Post.js'
+import Post from './Post/Post.js';
+import AddReduxPost from './AddPostForm.js'
 import {addPostActionCreater} from '../../../Redux/profile_Reducer.js'
 import {updateNewPostTextActionCreator} from '../../../Redux/profile_Reducer.js'
 
@@ -19,21 +20,17 @@ const MyPosts = (props) => {
        }
 
    /*принимаем значение с инпута и добавляем новую запись */
-   let onPostChange = () =>{
-      let text = newPostElement.current.value;
-       props.updateNewPostTextActionCreator(text);
 
+
+   let addPostProfile =(values)=> {
+      props.addPost(values.addPostProfile);
+      console.log(values.addPostProfile);
    }
+
   return (
     <div className ={s.postBlock}>
     <h3>My posts</h3>
-    <div>
-      <textarea  onChange ={onPostChange} ref={newPostElement}
-                   value={props.newPostText}> </textarea>
-    </div>
-    <div>
-        <button onClick={onAddPost} >btn</button>
-    </div>
+     <AddReduxPost  onSubmit ={addPostProfile} />
     <div className={s.post}>
       {myPostElement}
      </div>

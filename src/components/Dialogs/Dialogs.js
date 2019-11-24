@@ -3,9 +3,9 @@ import d from './Dialogs.module.css';
 import {BrowserRouter, Route} from  'react-router-dom';
 import {NavLink} from  'react-router-dom';
 import MessagesItem from './Messages/MessagesItem.js';
+import MessagesReduxForm from './messagesForm.js';
 import DialogItem from './DialogItem/DialogItem.js';
 import { Redirect } from 'react-router-dom';
-import {updateNewMessagesBodyCreator} from  '../../Redux/messagesPage_Reducer.js';
 import {sendMessagesCreater} from   '../../Redux/messagesPage_Reducer.js';
 
 const Dialogs =(props) => {
@@ -27,15 +27,16 @@ const Dialogs =(props) => {
        }
 
 
-    let onNewMessageChange = (e) => {
-      let body = e.target.value;
-      props.updateNewMessagesBody(body);
-    }
+
   let redirect = () => {
      if(!chekAuth) {
        return <Redirect to='/login' />
      }
   }
+  /*собирает то что пишем в иннпуте и нажимает на бнт у нас начинается сабмит*/
+  let addNewMessages = (values) => {
+      props.sendMessagesCreater(values.newMessagesBody);
+     }
 
   return(
     <div className= {d.dialogs}>
@@ -45,14 +46,9 @@ const Dialogs =(props) => {
    </div>
      <div className={d.messages}>
       <div>  {messagesElement} </div>
-      <div><textarea placeholder="send message"
-      value = { newMessagesBody }
-      onChange ={ onNewMessageChange }
-       ></textarea>
-        </div>
-      <div><button onClick = {onSendMessageClick}   >Send</button> </div>
-     </div>
 
+      </div>
+       <MessagesReduxForm onSubmit= {addNewMessages} />
   </div>
 
   );

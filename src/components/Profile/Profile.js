@@ -11,8 +11,8 @@ const Profile = (props) => {
 // можно передавать
   return (
   <div >
-    <Profileinfo  profile ={props.profile} />
-   <MyPostContainer /> 
+    <Profileinfo  profile ={props.profile}  updateStatus = {props.updateStatus} status ={props.status} />
+   <MyPostContainer />
   </div>
  );
 }
