@@ -2,18 +2,23 @@ import React from 'react';
 import l from './Login.module.css';
 import { Field ,reduxForm } from 'redux-form';
 import {NavLink} from 'react-router-dom';
-import {getLoginData} from '../../Redux/Login_Reducer.js';
+import {login} from '../../Redux/Auth_Reducer.js';
+import {required, maxLengthCreator} from '../../utils/validator/validators.js';
+import {Input} from '../Command/FormControls/formControls.js';
+import {connect} from 'react-redux';
+import { Redirect } from 'react-router-dom';
+let maxLength_10 = maxLengthCreator(30);
   const LoginForm = (props) => {
   return (
           <form onSubmit= {props.handleSubmit} >
             <div>
-            <Field name={"Login"} component={"input"} type={"text"} />
+            <Field name={"email"} component={Input}  validate ={[required, maxLength_10]} type={"text"} />
             </div>
             <div>
-            <Field name={"Password"} component="input" type={"password"} />
+            <Field name={"password"} component={Input}   validate ={[required, maxLength_10]} type={"password"} />
             </div>
             <div>
-            <Field name={"rememberMe"} component={"input"} type={"checkbox"} />
+            <Field name={"rememberMe"} component={Input}  type={"checkbox"} />
             </div>
             <div>
                <button>LoGin</button>
@@ -27,6 +32,10 @@ import {getLoginData} from '../../Redux/Login_Reducer.js';
 
   const Login = (props) => {
     const onSubmit = (formData) => {
+      props.login(formData.email ,formData.password, formData.rememberMe);
+    }
+    if(props.isAuth) {
+      return <Redirect to ={"/profile"} />
     }
 return (
       <div>
@@ -35,6 +44,8 @@ return (
       </div>
 )
 }
-
-
-export default Login;
+ const mapStateToProps= (state) =>({
+   isAuth: state.auth.isAuth
+ })
+/*login это сан крийтер */
+export default connect(mapStateToProps, {login})(Login);

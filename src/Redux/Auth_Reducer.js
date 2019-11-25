@@ -1,4 +1,5 @@
 import {authAPI} from "../api/api.js";
+
 const SET_USER_DATA = 'SET-USER-DATA';
 // изначально наш стейт ничего не имеет, то этому он ундефайнет, из за этого
 //надо сделать перемуннуцю которая будет ято то тда изначально ложить
@@ -18,21 +19,22 @@ const SET_USER_DATA = 'SET-USER-DATA';
 
      return {
        ...state,
-      ...action.data,
-      isAuth: true
+      ...action.payload,
+  
      }
      default:
        return state;
    }
  }
 
- export let setUserData = (userId, email, login) => {
+ export let setUserData = (userId, email, login, isAuth) => {
    return {
      type: SET_USER_DATA,
-     data: {
+     payload: {
        userId,
        email,
        login,
+       isAuth
 
      }
    }
@@ -42,9 +44,27 @@ const SET_USER_DATA = 'SET-USER-DATA';
     authAPI.me().then(response => {
                 if ( response.data.resultCode === 0) {
                     let {id, email , login} =  response.data.data;
-                    dispatch(setUserData(id, email , login));
+                    dispatch(setUserData(id, email , login, true));
                   }
 
             });
+ }
+
+ export const login = (email, password, rememberMe) =>
+  (dispatch) => {
+    authAPI.login(email, password, rememberMe).then(response => {
+                if ( response.data.resultCode === 0) {
+                      dispatch(getAuthData())
+                    }
+                });
+ }
+
+ export const logOut = () =>
+  (dispatch) => {
+    authAPI.logOut().then(response => {
+                if ( response.data.resultCode === 0) {
+                      dispatch(setUserData(null, null , null, false));
+                    }
+                });
  }
  export default authReducer;

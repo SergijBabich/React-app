@@ -14,8 +14,7 @@ let reducers = combineReducers({
   messagesPage: messagesReducer,
   sidebar  :sidebarReducer,
   usersPage: usersReducer,
-  auth: authReducer,
-  login: loginReducer,
+  auth : authReducer,
   form: formReducer
 });
 
