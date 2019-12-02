@@ -1,4 +1,4 @@
-import React from 'react';
+ import React from 'react';
 import d from './Dialogs.module.css';
 import {BrowserRouter, Route} from  'react-router-dom';
 import {NavLink} from  'react-router-dom';

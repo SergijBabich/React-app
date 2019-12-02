@@ -118,6 +118,7 @@ const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS';
 export const getUsers = (currentPage, pageSize ) => {
   return (dispatch) => {
   dispatch(setIsFeatching(true));
+    dispatch(setCurrentPage(currentPage));
   usersAPI.getUsers(currentPage,pageSize).then(data => {
         dispatch(setIsFeatching(false));
       dispatch(setUsers(data.items));

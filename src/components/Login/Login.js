@@ -20,6 +20,9 @@ let maxLength_10 = maxLengthCreator(30);
             <div>
             <Field name={"rememberMe"} component={Input}  type={"checkbox"} />
             </div>
+            {props.error &&  <div className={l.somerryError} >
+              {props.error}
+                </div>}
             <div>
                <button>LoGin</button>
             </div>
@@ -33,6 +36,7 @@ let maxLength_10 = maxLengthCreator(30);
   const Login = (props) => {
     const onSubmit = (formData) => {
       props.login(formData.email ,formData.password, formData.rememberMe);
+
     }
     if(props.isAuth) {
       return <Redirect to ={"/profile"} />
