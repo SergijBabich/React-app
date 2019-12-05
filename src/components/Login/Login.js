@@ -7,21 +7,24 @@ import {required, maxLengthCreator} from '../../utils/validator/validators.js';
 import {Input} from '../Command/FormControls/formControls.js';
 import {connect} from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import {createField} from "../Command/FormControls/formControls.js"
 let maxLength_10 = maxLengthCreator(30);
-  const LoginForm = (props) => {
+  const LoginForm = ({handleSubmit, error}) => {
   return (
-          <form onSubmit= {props.handleSubmit} >
+          <form onSubmit= {handleSubmit} >
             <div>
-            <Field name={"email"} component={Input}  validate ={[required, maxLength_10]} type={"text"} />
+                {createField('email',"ender your email",Input, [required, maxLength_10], 'text' )}
+
             </div>
             <div>
-            <Field name={"password"} component={Input}   validate ={[required, maxLength_10]} type={"password"} />
+              {createField('password',"",Input, [required, maxLength_10], 'password' )}
+        
             </div>
             <div>
             <Field name={"rememberMe"} component={Input}  type={"checkbox"} />
             </div>
-            {props.error &&  <div className={l.somerryError} >
-              {props.error}
+            {error &&  <div className={l.somerryError} >
+              {error}
                 </div>}
             <div>
                <button>LoGin</button>

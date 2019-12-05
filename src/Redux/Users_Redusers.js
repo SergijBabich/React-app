@@ -116,38 +116,37 @@ const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS';
   }
 
 export const getUsers = (currentPage, pageSize ) => {
-  return (dispatch) => {
+   return async (dispatch) => {
   dispatch(setIsFeatching(true));
     dispatch(setCurrentPage(currentPage));
-  usersAPI.getUsers(currentPage,pageSize).then(data => {
+   let data =  await usersAPI.getUsers(currentPage,pageSize);
         dispatch(setIsFeatching(false));
       dispatch(setUsers(data.items));
         dispatch(setCurrent(data.totalCount));
-  });
+  }
 }
+const followUnfollow = async (dispatch, userId, apiMethod, actionCreator)=> {
+    dispatch(toggleFollowingInProgress(true ,userId));
+ let response =  await apiMethod(userId);
+           if( response.data.resultCode ===0) {
+                  dispatch(actionCreator(userId));
+           }
+           dispatch(toggleFollowingInProgress(false, userId));
 }
-
 export const follow = (userId) => {
-  return (dispatch) => {
-    dispatch(toggleFollowingInProgress(true ,userId));
-   usersAPI.getFollow(userId).then(response => {
-             if( response.data.resultCode ===0) {
-                    dispatch(acceptFollow(userId));
-             }
-             dispatch(toggleFollowingInProgress(false, userId));
-           });
-}
-}
+ return async (dispatch) => {
+     let apiMethod = usersAPI.follow.bind(usersAPI);
+       let actionCreator  = acceptFollow;
+       followUnfollow(dispatch, userId, apiMethod, actionCreator);
 
+}
+}
 export const unfollow = (userId) => {
-  return (dispatch) => {
-    dispatch(toggleFollowingInProgress(true ,userId));
-   usersAPI.getUnFollow(userId).then(response => {
-             if( response.data.resultCode ===0) {
-                    dispatch(acceptFollow(userId));
-             }
-             dispatch(toggleFollowingInProgress(false, userId));
-           });
+ return async (dispatch) => {
+    let apiMethod = usersAPI.unfollow.bind(usersAPI);
+       let actionCreator  = acceptUnfollow;
+       followUnfollow(dispatch, userId, apiMethod, actionCreator);
+
 }
 }
 

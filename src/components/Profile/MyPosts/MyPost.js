@@ -1,12 +1,12 @@
-import React from 'react';
+import React, {Component} from 'react';
 import s from './MyPost.module.css';
 import Post from './Post/Post.js';
 import AddReduxPost from './AddPostForm.js'
 import {addPostActionCreater} from '../../../Redux/profile_Reducer.js'
 import {updateNewPostTextActionCreator} from '../../../Redux/profile_Reducer.js'
 
-const MyPosts = (props) => {
-
+const MyPosts = React.memo((props) => {
+console.log("dd");
   /* перебираем елементы с постов*/
   let myPostElement =
      props.myPostData.map( el => {
@@ -18,15 +18,11 @@ const MyPosts = (props) => {
    let onAddPost = ()=> {
      props.addPost();
        }
-
    /*принимаем значение с инпута и добавляем новую запись */
-
-
    let addPostProfile =(values)=> {
       props.addPost(values.addPostProfile);
       console.log(values.addPostProfile);
    }
-
   return (
     <div className ={s.postBlock}>
     <h3>My posts</h3>
@@ -36,6 +32,7 @@ const MyPosts = (props) => {
      </div>
     </div>
  );
-}
+
+});
 
 export default MyPosts;

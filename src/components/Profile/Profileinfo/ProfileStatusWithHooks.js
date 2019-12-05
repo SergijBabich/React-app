@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import s from './Profileinfo.module.css';
 import PreLoader from '../../Command/preLoader.js';
 
@@ -18,8 +18,9 @@ const activateEditMode= () => {
   const  onStatusChange = (e) => {
      setEditStatus( e.currentTarget.value);
    }
-
-
+      useEffect( () => {
+          setEditStatus(props.status);
+      }, [props.status]  );
     return (
       <div>
       { !editMode &&

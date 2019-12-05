@@ -1,6 +1,6 @@
 import {authAPI} from "../api/api.js";
 import {stopSubmit} from "redux-form";
-const SET_USER_DATA = 'SET-USER-DATA';
+const SET_USER_DATA = '/react-app/auth/SET-USER-DATA';
 const NOT_USER_DATA = 'NOT_USER_DATA';
 // изначально наш стейт ничего не имеет, то этому он ундефайнет, из за этого
 //надо сделать перемуннуцю которая будет ято то тда изначально ложить
@@ -44,20 +44,20 @@ const NOT_USER_DATA = 'NOT_USER_DATA';
 
 
  export const getAuthData = () =>
-  (dispatch) => {
-    return authAPI.me().then(response => {
-                if ( response.data.resultCode === 0) {
-                    let {id, email , login} =  response.data.data;
-                    dispatch(setUserData(id, email , login, true));
-                  }
+  async (dispatch) => {
+    let response = await authAPI.me();
+      if ( response.data.resultCode === 0) {
+        let {id, email , login} =  response.data.data;
+        dispatch(setUserData(id, email , login, true));
+              }
 
-            });
- }
+            };
+
 
  export const login = (email, password, rememberMe) =>
-  (dispatch) => {
+ async  (dispatch) => {
 
-    authAPI.login(email, password, rememberMe).then(response => {
+  let response = await  authAPI.login(email, password, rememberMe);
                 if ( response.data.resultCode === 0) {
                       dispatch(getAuthData())
                     }
@@ -65,15 +65,15 @@ const NOT_USER_DATA = 'NOT_USER_DATA';
                 let message =  response.data.messages.length >0 ?  response.data.messages[0]: "Some error"
                       dispatch(stopSubmit( 'login', {_error: message}));
                    }
-                });
- }
+                }
+
 
  export const logOut = () =>
-  (dispatch) => {
-    authAPI.logOut().then(response => {
+   async (dispatch) => {
+  let response  = await authAPI.logOut();
                 if ( response.data.resultCode === 0) {
                       dispatch(setUserData(null, null , null, false));
                     }
-                });
- }
+                }
+ 
  export default authReducer;
