@@ -15,11 +15,15 @@ import Settings from  './components/Settings/Settings.js';
 import {BrowserRouter, Route, withRouter} from  'react-router-dom';
 import {initializeApp} from  './Redux/App_Reducer.js';
 import {connect} from "react-redux";
+import {Provider} from  'react-redux';
 import {compose} from "redux";
+import store from "./Redux/Redux_Store";
 import ProfileContainer from './components/Profile/ProfileContainer.js';
 //import Tehnologies from  './Tehnologies.js';
 //import Footer from  './footer.js';
-
+//const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer.js'));
+//const Friends = React.lazy(() => import('./components/Friends/Friends.js'));
+//const Login = React.lazy(() => import('./components/Login/Login.js'));
 class  App extends Component {
       componentDidMount() {
             this.props.initializeApp();
@@ -58,6 +62,16 @@ class  App extends Component {
         let mapStateToProps = (state) => ({
             initialized: state.app.initialized
         });
-export default compose(
+let AppContainer =  compose(
                 withRouter,
                 connect(mapStateToProps, {initializeApp}))(App);
+let MainApp = (props) => {
+  return(
+        <BrowserRouter>
+          <Provider store = { store }>
+            <AppContainer />
+          </Provider>
+        </BrowserRouter>
+      )
+}
+export default MainApp;
